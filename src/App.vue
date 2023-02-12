@@ -1,62 +1,87 @@
+<script setup lang="ts">
+import TheHeader from './components/Header.vue';
+import TheFooter from './components/Footer.vue';
+import Shop from './components/Shop/Shop.vue';
+import Cart from './components/Cart/Cart.vue';
+import data from './data/product';
+
+import { reactive } from 'vue';
+import type { ProductInterface } from './interfaces';
+import type { ProductCartInterface } from './interfaces';
+
+const state = reactive<{
+  products: ProductInterface[];
+  cart: ProductCartInterface[];
+}>({
+  products: data,
+  cart: [],
+});
+
+function addProductToCart(productId: number): void {
+  const product = state.products.find((product) => product.id === productId);
+  if (product) {
+    const productInCart = state.cart.find(
+      (product) => product.id === productId
+    );
+    if (productInCart) {
+      productInCart.quantity++;
+    } else {
+      state.cart.push({ ...product, quantity: 1 });
+    }
+  }
+}
+function removeProductFromCart(productId: number): void {
+  const productFromCart = state.cart.find(
+    (product) => product.id === productId
+  );
+  if (productFromCart?.quantity === 1) {
+    state.cart = state.cart.filter((product) => product.id !== productId);
+  } else {
+    productFromCart.quantity--;
+  }
+}
+</script>
 
 <template>
-  <section class="product-list">
-    <PriceProduct v-for="(product,i) of products" @changeQt="updateQt"  :product="product" :key="i"/>
-  </section>
-  <div v-show="totalProductHT !== '0 HT €'">Le total HT est : {{ totalProductHT }}</div>
-  <div v-show="totalProductTTC !== '0 HT €'">Le total TTC est : {{ totalProductTTC }}</div>
-  <Answer/>
-
-  
+  <div class="app-container">
+    <TheHeader class="header" />
+    <Shop
+      :products="state.products"
+      @add-product-to-cart="addProductToCart"
+      class="shop"
+    />
+    <Cart
+      :cart="state.cart"
+      class="cart"
+      @remove-product-from-cart="removeProductFromCart"
+    />
+    <TheFooter class="footer" />
+  </div>
 </template>
-<script setup lang="ts">
-import { computed, reactive, watch} from 'vue';
-import type { IProduct } from './interfaces/product.interface'
-const products =reactive<IProduct[]>( [
-  {
-    id: 1,
-    quantite: 0,
-    prix: 150,
-    tva: 20,
-    nom: 'voiture',
-    total : 0
-    }, 
-    {
-    id: 2,
-    quantite: 0,
-    prix: 100,
-    tva: 10,
-    nom: 'moto',
-    total : 0
-  }
-])
 
-const updateQt = (idEl:number, val: any) => {
-  products.map(el => {
-    if (el.id === idEl) {
-      el.quantite = val;
-      return el.total = el.quantite * el.prix;
-    }
-  })
+<style lang="scss">
+@import './assets/base.scss';
+@import './assets/debug.scss';
+
+.app-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-areas: 'header header' 'shop cart' 'footer footer';
+  grid-template-columns: 75% 25%;
+  grid-template-rows: 48px auto 48px;
 }
-
-const totalProductHT = computed(()=> `${products.reduce((a, b) => (b.quantite * b.prix) + a ,0)} € HT`)
-const totalProductTTC = computed(()=> `${(products.reduce((a, b) => ((b.quantite * b.prix * (1 + b.tva/100))) + a ,0)).toFixed(2)} € TTC`)
-watch([products], () => {
-  products.map(el => el.total = el.quantite * el.prix)
-})
-
-</script>
-<style scoped lang="scss">
-.product-list {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-
+.header {
+  grid-area: header;
 }
-
+.shop {
+  grid-area: shop;
+}
+.cart {
+  grid-area: cart;
+  border-left: var(--border);
+  background-color: white;
+}
+.footer {
+  grid-area: footer;
+}
 </style>
-
-
-
-
