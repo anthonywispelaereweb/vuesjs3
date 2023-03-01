@@ -3,7 +3,7 @@ import App from './App.vue'
 
 
 
-import './assets/main.scss'
+import './assets/scss/main.scss'
 
 createApp(App)
 	.mount('#app')
