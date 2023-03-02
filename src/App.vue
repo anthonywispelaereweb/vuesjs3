@@ -3,6 +3,8 @@ import TheHeader from './components/Header.vue';
 import TheFooter from './components/Footer.vue';
 import Shop from './components/Shop/Shop.vue';
 import Cart from './components/Cart/Cart.vue';
+import Form from './components/form.vue';
+import FormZod from './components/formZod.vue';
 import data from './data/product';
 import { computed, reactive } from 'vue';
 import type {
@@ -90,7 +92,7 @@ const filteredProducts = computed(() => {
       gridEmpty: cartEmpty,
     }"
   >
-    <TheHeader class="header" />
+    <!-- <TheHeader class="header" />
     <Shop
       @update-filter="updateFilter"
       :products="filteredProducts"
@@ -105,7 +107,9 @@ const filteredProducts = computed(() => {
       class="cart"
       @remove-product-from-cart="removeProductFromCart"
     />
-    <TheFooter class="footer" />
+    <TheFooter class="footer" /> -->
+    <Form />
+    <FormZod />
   </div>
 </template>
 
