@@ -4,17 +4,25 @@ import TheFooter from './components/Footer.vue';
 import Shop from './components/Shop/Shop.vue';
 import Cart from './components/Cart/Cart.vue';
 import data from './data/product';
-
 import { computed, reactive } from 'vue';
-import type { ProductInterface } from './interfaces';
-import type { ProductCartInterface } from './interfaces';
+import type {
+  FiltersInterface,
+  ProductCartInterface,
+  ProductInterface,
+  FilterUpdate,
+} from './interfaces';
+import { DEFAULT_FILTERS } from './data/filters';
 
 const state = reactive<{
   products: ProductInterface[];
   cart: ProductCartInterface[];
+  filters: FiltersInterface;
+  nbTotalProducts: number
 }>({
   products: data,
   cart: [],
+  filters: { ...DEFAULT_FILTERS },
+  nbTotalProducts:data.length
 });
 
 function addProductToCart(productId: number): void {
@@ -38,11 +46,41 @@ function removeProductFromCart(productId: number): void {
   if (productFromCart?.quantity === 1) {
     state.cart = state.cart.filter((product) => product.id !== productId);
   } else {
-    productFromCart.quantity--;
+    if (productFromCart) productFromCart.quantity--;
+  }
+}
+
+function updateFilter(filterUpdate: FilterUpdate) {
+  if (filterUpdate.search !== undefined) {
+    state.filters.search = filterUpdate.search;
+  } else if (filterUpdate.priceRange) {
+    state.filters.priceRange = filterUpdate.priceRange;
+  } else if (filterUpdate.category) {
+    state.filters.category = filterUpdate.category;
+  } else {
+    state.filters = { ...DEFAULT_FILTERS };
   }
 }
 
 const cartEmpty = computed(() => state.cart.length === 0);
+
+const filteredProducts = computed(() => {
+  return state.products.filter((product) => {
+    if (
+      product.title
+        .toLocaleLowerCase()
+        .startsWith(state.filters.search.toLocaleLowerCase()) &&
+      product.price >= state.filters.priceRange[0] &&
+      product.price <= state.filters.priceRange[1] &&
+      (product.category === state.filters.category ||
+        state.filters.category === 'all')
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+});
 </script>
 
 <template>
@@ -54,7 +92,10 @@ const cartEmpty = computed(() => state.cart.length === 0);
   >
     <TheHeader class="header" />
     <Shop
-      :products="state.products"
+      @update-filter="updateFilter"
+      :products="filteredProducts"
+      :filters="state.filters"
+      :nbTotalProducts="state.nbTotalProducts"
       @add-product-to-cart="addProductToCart"
       class="shop"
     />
