@@ -2,7 +2,6 @@ import type { ProductInterface } from './interfaces';
 
 export default [
   {
-    id: 1,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/macbookpro.PNG',
     title: 'Macbook Pro',
@@ -12,7 +11,6 @@ export default [
     category: 'desktop',
   },
   {
-    id: 2,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/levono.PNG',
     title: 'Levono Pro',
@@ -22,7 +20,6 @@ export default [
     category: 'desktop',
   },
   {
-    id: 3,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/rider.PNG',
     title: 'Rider',
@@ -32,7 +29,6 @@ export default [
     category: 'desktop',
   },
   {
-    id: 4,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/ldlc.PNG',
     title: 'LDLC benolo',
@@ -42,7 +38,6 @@ export default [
     category: 'gamer',
   },
   {
-    id: 5,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/asus.PNG',
     title: 'Asus gamer',
@@ -52,7 +47,6 @@ export default [
     category: 'streaming',
   },
   {
-    id: 6,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/rog.PNG',
     title: 'Rog desktop',
@@ -62,7 +56,6 @@ export default [
     category: 'streaming',
   },
   {
-    id: 7,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/msi.PNG',
     title: 'MSI play',
@@ -72,7 +65,6 @@ export default [
     category: 'gaming',
   },
   {
-    id: 8,
     image:
       'https://stackblitz.com/files/vitejs-vite-auyhqv/github/dymafr/vue-c8l8/master/src/assets/images/pad.PNG',
     title: 'Think pad',
