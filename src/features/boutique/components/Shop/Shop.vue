@@ -10,12 +10,13 @@ import ShopFilters from './ShopFilters.vue';
 defineProps<{
   products: ProductInterface[];
   filters: FiltersInterface;
-  nbTotalProducts: number
 }>();
 
 const emit = defineEmits<{
   (e: 'addProductToCart', productId: string): void;
   (e: 'updateFilter', updateFilter: FilterUpdate): void;
+  (e: 'incPage'): void;
+
 }>();
 </script>
 
@@ -24,13 +25,13 @@ const emit = defineEmits<{
     <ShopFilters
       :filters="filters"
       :nbr-of-products="products.length"
-      :nbTotalProducts="nbTotalProducts"
       @update-filter="emit('updateFilter', $event)"
       class="shop-filter"
     />
     <ShopProductList
       class="flex-fill scrollable"
       @add-product-to-cart="emit('addProductToCart', $event)"
+      @inc-page="emit('incPage')"
       :products="products"
     />
   </div>

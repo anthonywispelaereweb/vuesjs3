@@ -8,17 +8,23 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'addProductToCart', productId: string): void;
+  (e: 'incPage'): void;
 }>();
 </script>
 
 <template>
-  <div class="grid p-20">
-    <ShopProduct
-      @add-product-to-cart="emit('addProductToCart', $event)"
-      v-for="product of products"
-      :product="product"
-      :key="product._id"
-    />
+  <div class="d-flex flex-column p-20">
+    <div class="grid mb-20">
+      <ShopProduct
+        @add-product-to-cart="emit('addProductToCart', $event)"
+        v-for="product of products"
+        :product="product"
+        :key="product._id"
+      />
+    </div>
+    <div class="d-flex flex-raw align-items-center justify-content-center ">
+      <button @click="emit('incPage')" class="btn btn-primary">Charger plus de produits</button>
+    </div>
   </div>
 </template>
 

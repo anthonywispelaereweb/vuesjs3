@@ -5,7 +5,7 @@ import Boutique from './features/boutique/Boutique.vue';
 import Admin from './features/admin/Admin.vue';
 import { reactive, type Component as C } from 'vue';
 import type { Page } from './interfaces';
-import { seed } from './data/seed';
+import { seed40articles } from './data/seed';
 
 const state = reactive<{
     page: Page
@@ -21,7 +21,9 @@ const pages: { [s: string]: C } = {
 function navigate(page: Page): void {
     state.page = page;
 }
+
 const collectionNameTest = 'testProductsTonio'
+// seed40articles(collectionNameTest);
 // seed(collectionNameTest); 
 </script>
 

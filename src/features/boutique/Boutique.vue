@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Shop from "./components/Shop/Shop.vue";
 import Cart from "./components/Cart/Cart.vue";
-import { computed, reactive } from "vue";
+import { fetchProducts } from "../../shared/services/product.service";
+import { computed, reactive, watchEffect } from "vue";
 import type {
   FiltersInterface,
   ProductCartInterface,
@@ -14,18 +15,30 @@ const state = reactive<{
   products: ProductInterface[];
   cart: ProductCartInterface[];
   filters: FiltersInterface;
+  page: number;
+  isLoading: boolean;
+  moreResults: boolean;
 }>({
   products: [],
   cart: [],
   filters: { ...DEFAULT_FILTERS },
+  page: 1,
+  isLoading: true,
+  moreResults: true
+
 });
 
-const products = await (await fetch("https://restapi.fr/api/testProductsTonio")).json();
-if (Array.isArray(products)) {
-  state.products = products;
-} else {
-  state.products = [products];
-}
+watchEffect(async () => {
+  state.isLoading = true;
+  const products = await fetchProducts(state.filters);
+  if (Array.isArray(products)) {
+    state.products = [...products];
+  } else {
+    state.products = [products];
+  }
+  state.isLoading = false;
+
+});
 
 function addProductToCart(productId: string): void {
   const product = state.products.find((product) => product._id === productId);
@@ -87,6 +100,8 @@ const filteredProducts = computed(() => {
       :products="filteredProducts"
       :filters="state.filters"
       @add-product-to-cart="addProductToCart"
+      @inc-page="state.page++"
+      
       class="shop"
     />
     <Cart
